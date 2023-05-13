@@ -1,0 +1,70 @@
+﻿<Window x:Class="TaskManagementApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TaskManagementApp" xmlns:Application="clr-namespace:BLLibrary;assembly=BLLibrary"
+        d:DataContext="{d:DesignInstance Type=Application}"
+        mc:Ignorable="d"
+        Title="ProjectManagerForm" Height="450" Width="800">
+
+    <Window.Resources>
+        <CollectionViewSource x:Key="EmployeeView" Source="{Binding Employees}"/>
+        <CollectionViewSource
+            x:Key="EStatusView" Source="{Binding EmployeeStatus}"/>
+        <CollectionViewSource
+            x:Key="EPriorityView" Source="{Binding EmployeePriority}"/>
+    </Window.Resources>
+    
+
+    <DockPanel Margin="10">
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="5">
+            <Button Margin="5" Click="Save_Click">Save</Button>
+        </StackPanel>
+        <DataGrid ItemsSource="{Binding EmployeeTasks}" AutoGenerateColumns="False" RowHeaderWidth="32">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Id" Binding="{Binding EtId, Mode=OneWay}"/>
+                
+                <DataGridTextColumn Header="Title" Binding="{Binding EtTitle}"/>
+                
+                <DataGridComboBoxColumn Header="Status"
+                    SelectedValueBinding="{Binding EtStatus}"
+                    ItemsSource="{Binding Source={StaticResource EStatusView}}"
+                    DisplayMemberPath="EsStatus"
+                    SelectedValuePath="EsId" />
+                
+                <DataGridComboBoxColumn             Header="Priority"
+                                                                ItemsSource="{Binding Source=                   {StaticResource EPriorityView}}"
+                    SelectedValueBinding="{Binding EtPriority}"
+                   
+                    
+                    SelectedValuePath="EpId"
+                                     DisplayMemberPath="EpPriority"/>
+                
+                <DataGridComboBoxColumn
+                    Header="Author"
+                    ItemsSource="{Binding Source={StaticResource EmployeeView}}"
+                    SelectedValueBinding="{Binding EtAuthor}"
+                    SelectedValuePath="Id"
+                    DisplayMemberPath="Name" />
+                
+                <DataGridComboBoxColumn
+                    Header="Executor"
+                    ItemsSource="{Binding Source={StaticResource EmployeeView}}"
+                    SelectedValueBinding="{Binding EtExecutor}"
+                    SelectedValuePath="Id"
+                    DisplayMemberPath="Name" />
+                
+                <DataGridTemplateColumn Header="Estimate">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <DatePicker SelectedDate="{Binding EtEstimate, Mode=TwoWay}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn Header="Description" Binding="{Binding EtDescription}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</Window>
